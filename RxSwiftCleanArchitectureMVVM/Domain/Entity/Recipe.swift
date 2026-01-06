@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct RecipeList: Decodable {
+public struct RecipeList: Decodable {
     // 레시피 갯수
     let totalCount: Int
     // 통신 결과
-    let result: Result
+    let apiResult: ApiResult
     // 레시피들
     let recipes: [Recipe]?
     
@@ -21,15 +21,15 @@ struct RecipeList: Decodable {
         case recipes
     }
     
-    init(from decoder: any Decoder) throws {
+    public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.totalCount = try container.decode(Int.self, forKey: .totalCount)
-        self.result = try container.decode(Result.self, forKey: .result)
+        self.apiResult = try container.decode(ApiResult.self, forKey: .result)
         self.recipes = try container.decodeIfPresent([Recipe].self, forKey: .recipes)
     }
 }
 
-struct Result: Decodable {
+public struct ApiResult: Decodable {
     let code: String
     let message: String
     
@@ -38,14 +38,14 @@ struct Result: Decodable {
         case message = "MSG"
     }
     
-    init(from decoder: any Decoder) throws {
+    public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.code = try container.decode(String.self, forKey: .code)
         self.message = try container.decode(String.self, forKey: .message)
     }
 }
 
-struct Recipe: Decodable {
+public struct Recipe: Decodable {
     // 레시피 ID
     let id: Int
     // 메뉴
@@ -177,7 +177,7 @@ struct Recipe: Decodable {
         case manualImg20 = "MANUAL_IMG20"
     }
     
-    init(from decoder: any Decoder) throws {
+    public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(Int.self, forKey: .id)
         self.recipeName = try container.decode(String.self, forKey: .recipeName)
