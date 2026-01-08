@@ -8,28 +8,28 @@
 import Foundation
 
 public enum NetworkError: Error {
-    case urlSessionError(Error)
-    case invalidURL(String)
-    case decodingError(Error)
+    case urlError
+    case decodingError(String)
     case noData
-    case statusCode(Int)
+    case serverErrorStatusCode(Int)
     case requestFailed(String)
+    case invalidResponse
     case unknown
     
     public var description: String {
         switch self {
-        case .urlSessionError(let error):
-            return error.localizedDescription
-        case .invalidURL(let urlString):
-            return "Invalid URL: \(urlString)"
-        case .decodingError(let error):
-            return error.localizedDescription
+        case .urlError:
+            return "URL Error."
+        case .decodingError(let description):
+            return "decoding Error: \(description)."
         case .noData:
             return "No data returned."
-        case .statusCode(let code):
-            return "Status code: \(code)"
+        case .serverErrorStatusCode(let code):
+            return "Server Error Status Code: \(code)."
         case .requestFailed(let message):
             return "Request failed: \(message)"
+        case .invalidResponse:
+            return "Invalid response."
         default:
             return "Unknown error."
         }
