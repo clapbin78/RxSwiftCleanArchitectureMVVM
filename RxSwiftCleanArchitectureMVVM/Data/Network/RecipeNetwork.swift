@@ -7,14 +7,18 @@
 
 import Foundation
 
-final public class UserNetwork {
+public protocol RecipeNetworkProtocol {
+    func fetchRecipes(startIndex: Int, endIndex: Int) async -> Result<RecipeList, NetworkError>
+}
+
+final public class RecipeNetwork {
     private let manager: NetworkManagerProtocol
     init(manager: NetworkManagerProtocol) {
         self.manager = manager
     }
     
-    func fetchRecipe(startIndex: Int, endIndex: Int) async -> Result<RecipeList, NetworkError> {
-        let url = "http://openapi.foodsafetykorea.go.kr/api/personalAuthenticationKey/COOKRCP01/json/\(startIndex)/\(endIndex)"
+    func fetchRecipes(startIndex: Int, endIndex: Int) async -> Result<RecipeList, NetworkError> {
+        let url = "http://openapi.foodsafetykorea.go.kr/api/{personalAuthenticationKey}/COOKRCP01/json/\(startIndex)/\(endIndex)"
         return await manager.fetchData(url: url, method: .get)
     }
 }

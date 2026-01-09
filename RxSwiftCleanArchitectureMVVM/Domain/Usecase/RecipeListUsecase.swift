@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol RecipeListUsecaseProtocol {
-    func fetchRecipes(query: String, page: Int) async -> Result<RecipeList, NetworkError>
+    func fetchRecipes(startIndex: Int, endIndex: Int) async -> Result<RecipeList, NetworkError>
     func getFavoriteRecipes() -> Result<[Recipe], CoreDataError>
     func saveFavoriteRecipe(recipe: Recipe) -> Result<Bool, CoreDataError>
     func removeFavoriteRecipe(recipeId: Int) -> Result<Bool, CoreDataError>
@@ -21,8 +21,8 @@ public struct RecipeListUsecase: RecipeListUsecaseProtocol {
         self.repository = repository
     }
     
-    public func fetchRecipes(query: String, page: Int) async -> Result<RecipeList, NetworkError> {
-        await repository.fetchRecipes(query: query, page: page)
+    public func fetchRecipes(startIndex: Int, endIndex: Int) async -> Result<RecipeList, NetworkError> {
+        await repository.fetchRecipes(startIndex: startIndex, endIndex: endIndex)
     }
     
     public func getFavoriteRecipes() -> Result<[Recipe], CoreDataError> {

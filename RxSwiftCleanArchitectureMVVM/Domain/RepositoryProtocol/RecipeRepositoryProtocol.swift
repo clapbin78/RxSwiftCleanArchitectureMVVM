@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol RecipeRepositoryProtocol {
-    func fetchRecipes(query: String, page: Int) async -> Result<RecipeList, NetworkError>
+    func fetchRecipes(startIndex: Int, endIndex: Int) async -> Result<RecipeList, NetworkError>
     func getFavoriteRecipes() -> Result<[Recipe], CoreDataError>
     func saveFavoriteRecipe(recipe: Recipe) -> Result<Bool, CoreDataError>
     func removeFavoriteRecipe(recipeId: Int) -> Result<Bool, CoreDataError>

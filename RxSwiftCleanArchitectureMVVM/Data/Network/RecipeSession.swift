@@ -13,7 +13,7 @@ public protocol SessionProtocol {
                  method: HTTPMethod) -> DataRequest
 }
 
-class UserSession {
+class RecipeSession {
     private var session: Session
     init() {
         let configuration = URLSessionConfiguration.default
