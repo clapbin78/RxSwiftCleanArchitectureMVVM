@@ -75,7 +75,7 @@ public struct Recipe: Decodable {
     // 저감 조리법
     let recipeNatTips: String?
     // 해시태그
-    let hashTag: String
+    let hashTag: String?
     // 만드는법 01~20
     let manual01: String?
     let manual02: String?
@@ -234,5 +234,68 @@ public struct Recipe: Decodable {
         self.manualImg18 = try container.decodeIfPresent(String.self, forKey: .manualImg18)
         self.manualImg19 = try container.decodeIfPresent(String.self, forKey: .manualImg19)
         self.manualImg20 = try container.decodeIfPresent(String.self, forKey: .manualImg20)
+    }
+    
+    public init(id: Int,
+                recipeName: String, recipeParts: String, recipeWay: String, recipePat: String,
+                infoWeight: String, infoEnergy: String, infoCar: String, infoPro: String, infoFat: String, infoNa: String,
+                bigMainImage: String?, smallMainImage: String?, recipeNatTips: String?, hashTag: String?,
+                manual01: String? = nil, manual02: String? = nil, manual03: String? = nil, manual04: String? = nil, manual05: String? = nil, manual06: String? = nil, manual07: String? = nil, manual08: String? = nil, manual09: String? = nil, manual10: String? = nil, manual11: String? = nil, manual12: String? = nil, manual13: String? = nil, manual14: String? = nil, manual15: String? = nil, manual16: String? = nil, manual17: String? = nil, manual18: String? = nil, manual19: String? = nil, manual20: String? = nil,
+                manualImg01: String? = nil, manualImg02: String? = nil, manualImg03: String? = nil, manualImg04: String? = nil, manualImg05: String? = nil, manualImg06: String? = nil, manualImg07: String? = nil, manualImg08: String? = nil, manualImg09: String? = nil, manualImg10: String? = nil, manualImg11: String? = nil, manualImg12: String? = nil, manualImg13: String? = nil, manualImg14: String? = nil, manualImg15: String? = nil, manualImg16: String? = nil, manualImg17: String? = nil, manualImg18: String? = nil, manualImg19: String? = nil, manualImg20: String? = nil) {
+        self.id = id
+        self.recipeName = recipeName
+        self.recipeParts = recipeParts
+        self.recipeWay = recipeWay
+        self.recipePat = recipePat
+        self.infoWeight = infoWeight
+        self.infoEnergy = infoEnergy
+        self.infoCar = infoCar
+        self.infoPro = infoPro
+        self.infoFat = infoFat
+        self.infoNa = infoNa
+        self.bigMainImage = bigMainImage
+        self.smallMainImage = smallMainImage
+        self.recipeNatTips = recipeNatTips
+        self.hashTag = hashTag
+        self.manual01 = manual01
+        self.manual02 = manual02
+        self.manual03 = manual03
+        self.manual04 = manual04
+        self.manual05 = manual05
+        self.manual06 = manual06
+        self.manual07 = manual07
+        self.manual08 = manual08
+        self.manual09 = manual09
+        self.manual10 = manual10
+        self.manual11 = manual11
+        self.manual12 = manual12
+        self.manual13 = manual13
+        self.manual14 = manual14
+        self.manual15 = manual15
+        self.manual16 = manual16
+        self.manual17 = manual17
+        self.manual18 = manual18
+        self.manual19 = manual19
+        self.manual20 = manual20
+        self.manualImg01 = manualImg01
+        self.manualImg02 = manualImg02
+        self.manualImg03 = manualImg03
+        self.manualImg04 = manualImg04
+        self.manualImg05 = manualImg05
+        self.manualImg06 = manualImg06
+        self.manualImg07 = manualImg07
+        self.manualImg08 = manualImg08
+        self.manualImg09 = manualImg09
+        self.manualImg10 = manualImg10
+        self.manualImg11 = manualImg11
+        self.manualImg12 = manualImg12
+        self.manualImg13 = manualImg13
+        self.manualImg14 = manualImg14
+        self.manualImg15 = manualImg15
+        self.manualImg16 = manualImg16
+        self.manualImg17 = manualImg17
+        self.manualImg18 = manualImg18
+        self.manualImg19 = manualImg19
+        self.manualImg20 = manualImg20
     }
 }

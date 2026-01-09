@@ -1,4 +1,60 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="false" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23788.4" systemVersion="24G84" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="FavoriteRecipe" representedClassName="FavoriteRecipe" syncable="YES" codeGenerationType="class">
+        <attribute name="bigMainImage" optional="YES" attributeType="String"/>
+        <attribute name="hashTag" attributeType="String"/>
+        <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="infoCar" attributeType="String"/>
+        <attribute name="infoEnergy" attributeType="String"/>
+        <attribute name="infoFat" attributeType="String"/>
+        <attribute name="infoNa" attributeType="String"/>
+        <attribute name="infoPro" attributeType="String"/>
+        <attribute name="infoWeight" attributeType="String"/>
+        <attribute name="manual01" optional="YES" attributeType="String"/>
+        <attribute name="manual02" optional="YES" attributeType="String"/>
+        <attribute name="manual03" optional="YES" attributeType="String"/>
+        <attribute name="manual04" optional="YES" attributeType="String"/>
+        <attribute name="manual05" optional="YES" attributeType="String"/>
+        <attribute name="manual06" optional="YES" attributeType="String"/>
+        <attribute name="manual07" optional="YES" attributeType="String"/>
+        <attribute name="manual08" optional="YES" attributeType="String"/>
+        <attribute name="manual09" optional="YES" attributeType="String"/>
+        <attribute name="manual10" optional="YES" attributeType="String"/>
+        <attribute name="manual11" optional="YES" attributeType="String"/>
+        <attribute name="manual12" optional="YES" attributeType="String"/>
+        <attribute name="manual13" optional="YES" attributeType="String"/>
+        <attribute name="manual14" optional="YES" attributeType="String"/>
+        <attribute name="manual15" optional="YES" attributeType="String"/>
+        <attribute name="manual16" optional="YES" attributeType="String"/>
+        <attribute name="manual17" optional="YES" attributeType="String"/>
+        <attribute name="manual18" optional="YES" attributeType="String"/>
+        <attribute name="manual19" optional="YES" attributeType="String"/>
+        <attribute name="manual20" optional="YES" attributeType="String"/>
+        <attribute name="manualImg01" optional="YES" attributeType="String"/>
+        <attribute name="manualImg02" optional="YES" attributeType="String"/>
+        <attribute name="manualImg03" optional="YES" attributeType="String"/>
+        <attribute name="manualImg04" optional="YES" attributeType="String"/>
+        <attribute name="manualImg05" optional="YES" attributeType="String"/>
+        <attribute name="manualImg06" optional="YES" attributeType="String"/>
+        <attribute name="manualImg07" optional="YES" attributeType="String"/>
+        <attribute name="manualImg08" optional="YES" attributeType="String"/>
+        <attribute name="manualImg09" optional="YES" attributeType="String"/>
+        <attribute name="manualImg10" optional="YES" attributeType="String"/>
+        <attribute name="manualImg11" optional="YES" attributeType="String"/>
+        <attribute name="manualImg12" optional="YES" attributeType="String"/>
+        <attribute name="manualImg13" optional="YES" attributeType="String"/>
+        <attribute name="manualImg14" optional="YES" attributeType="String"/>
+        <attribute name="manualImg15" optional="YES" attributeType="String"/>
+        <attribute name="manualImg16" optional="YES" attributeType="String"/>
+        <attribute name="manualImg17" optional="YES" attributeType="String"/>
+        <attribute name="manualImg18" optional="YES" attributeType="String"/>
+        <attribute name="manualImg19" optional="YES" attributeType="String"/>
+        <attribute name="manualImg20" optional="YES" attributeType="String"/>
+        <attribute name="recipeName" attributeType="String"/>
+        <attribute name="recipeNatTips" optional="YES" attributeType="String"/>
+        <attribute name="recipeParts" attributeType="String"/>
+        <attribute name="recipePat" attributeType="String"/>
+        <attribute name="recipeWay" attributeType="String"/>
+        <attribute name="smallMainImage" optional="YES" attributeType="String"/>
+    </entity>
 </model>
