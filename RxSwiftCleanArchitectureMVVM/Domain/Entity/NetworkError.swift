@@ -21,7 +21,7 @@ public enum NetworkError: Error {
         case .urlError:
             return "URL Error."
         case .decodingError(let description):
-            return "decoding Error: \(description)."
+            return "Decoding Error: \(description)."
         case .noData:
             return "No data returned."
         case .serverErrorStatusCode(let code):

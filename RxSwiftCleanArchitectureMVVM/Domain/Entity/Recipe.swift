@@ -45,7 +45,7 @@ public struct ApiResult: Decodable {
     }
 }
 
-public struct Recipe: Decodable {
+public struct Recipe: Decodable, Hashable {
     // 레시피 ID
     let id: Int
     // 메뉴
