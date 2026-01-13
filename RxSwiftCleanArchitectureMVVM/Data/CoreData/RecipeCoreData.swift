@@ -33,10 +33,11 @@ public struct RecipeCoreData: RecipeCoreDataProtocol {
                               manual01: favoriteRecipe.manual01, manual02: favoriteRecipe.manual02, manual03: favoriteRecipe.manual03, manual04: favoriteRecipe.manual04, manual05: favoriteRecipe.manual05, manual06: favoriteRecipe.manual06, manual07: favoriteRecipe.manual07, manual08: favoriteRecipe.manual08, manual09: favoriteRecipe.manual09, manual10: favoriteRecipe.manual10, manual11: favoriteRecipe.manual11, manual12: favoriteRecipe.manual12, manual13: favoriteRecipe.manual13, manual14: favoriteRecipe.manual14, manual15: favoriteRecipe.manual15, manual16: favoriteRecipe.manual16, manual17: favoriteRecipe.manual17, manual18: favoriteRecipe.manual18, manual19: favoriteRecipe.manual19, manual20: favoriteRecipe.manual20,
                               manualImg01: favoriteRecipe.manualImg01, manualImg02: favoriteRecipe.manualImg02, manualImg03: favoriteRecipe.manualImg03, manualImg04: favoriteRecipe.manualImg04, manualImg05: favoriteRecipe.manualImg05, manualImg06: favoriteRecipe.manualImg06, manualImg07: favoriteRecipe.manualImg07, manualImg08: favoriteRecipe.manualImg08, manualImg09: favoriteRecipe.manualImg09, manualImg10: favoriteRecipe.manualImg10, manualImg11: favoriteRecipe.manualImg11, manualImg12: favoriteRecipe.manualImg12, manualImg13: favoriteRecipe.manualImg13, manualImg14: favoriteRecipe.manualImg14, manualImg15: favoriteRecipe.manualImg15, manualImg16: favoriteRecipe.manualImg16, manualImg17: favoriteRecipe.manualImg18, manualImg19: favoriteRecipe.manualImg19, manualImg20: favoriteRecipe.manualImg20)
             }
-            
+            return.success(recipeList)
         } catch {
             return .failure(.readFailed(error.localizedDescription))
         }
+        
     }
     
     public func saveFavoriteRecipe(recipe: Recipe) -> Result<Bool, CoreDataError> {
@@ -120,7 +121,7 @@ public struct RecipeCoreData: RecipeCoreDataProtocol {
             try viewContext.save()
             return .success(true)
         } catch {
-            return .failure(.deleteFailed(error.localizedDescription))
+            return .failure(.removeFailed(error.localizedDescription))
         }
     }
     

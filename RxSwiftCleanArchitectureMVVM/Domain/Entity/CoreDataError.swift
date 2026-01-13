@@ -11,7 +11,7 @@ public enum CoreDataError: Error {
     case entityNotFound(String)
     case saveFailed(String)
     case readFailed(String)
-    case deleteFailed(String)
+    case removeFailed(String)
     
     public var description: String {
         switch self {
@@ -21,7 +21,7 @@ public enum CoreDataError: Error {
             return message
         case .readFailed(let message):
             return message
-        case .deleteFailed(let message):
+        case .removeFailed(let message):
             return message
         }
     }

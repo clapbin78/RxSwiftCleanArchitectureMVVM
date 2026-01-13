@@ -39,7 +39,7 @@ public struct RecipeListUsecase: RecipeListUsecaseProtocol {
     
     public func removeFavoriteRecipe(recipeId: Int) -> Result<Bool, CoreDataError> {
         // 일단 failure로 해놓음
-        .failure(.deleteFailed(""))
+        .failure(.removeFailed(""))
     }
     
     public func checkFavoriteStatus(fetchRecipes: [Recipe], favoriteRecipes: [Recipe]) -> [(recipe: Recipe, isFavorite: Bool)] {
