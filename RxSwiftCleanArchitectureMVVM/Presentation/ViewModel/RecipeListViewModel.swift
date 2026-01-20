@@ -30,7 +30,7 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
         let query: Observable<String>
         let saveFavorite: Observable<Recipe>
         let removeFavorite: Observable<Int>
-        let fetchMoreRecipe: Observable<Void>
+        let fetchMoreRecipeList: Observable<Void>
     }
     
     public struct Output { // VC에게 전달할 뷰 데이터
@@ -39,8 +39,14 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
     }
     
     public func transform(input: Input) -> Output { // VC 이벤트 -> VM 데이터
-        input.query.bind { query in
+        input.query.bind { [weak self] query in
             // fetchRecipeList, favoriteRecipeList
+            guard let isValidate = self?.validateQuery(query: query), isValidate else {
+                self?.getFavoriteRecipes(query: "")
+                return
+            }
+            self?.fetchRecipes(query: query, startIndex: 0, endIndex: 0)
+            self?.getFavoriteRecipes(query: query)
         }.disposed(by: disposeBag)
         
         input.saveFavorite
@@ -53,7 +59,7 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
                 // 즐겨찾기 제거
         }.disposed(by: disposeBag)
         
-        input.fetchMoreRecipe
+        input.fetchMoreRecipeList
             .bind {
                 // 다음 페이지 fetch
         }.disposed(by: disposeBag)
@@ -66,6 +72,51 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
         }
         
         return Output(cellData: cellData, error: error.asObservable())
+    }
+    
+    private func fetchRecipes(query: String, startIndex: Int, endIndex: Int) {
+        guard let urlAllowedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
+        Task {
+            let result = await usecase.fetchRecipes(startIndex: startIndex, endIndex: endIndex)
+            switch result {
+            case let .success(recipes):
+                if let recipes = recipes.recipes {
+                    if startIndex == 0 {
+                        fetchRecipeList.accept(recipes)
+                    } else {
+                        fetchRecipeList.accept(fetchRecipeList.value + recipes)
+                    }
+                }
+            case let .failure(error):
+                self.error.accept(error.description)
+            }
+        }
+    }
+    
+    private func getFavoriteRecipes(query: String) {
+        let result = usecase.getFavoriteRecipes()
+        switch result {
+        case .success(let recipes):
+            if query.isEmpty {
+                favoriteRecipeList.accept(recipes)
+            } else {
+                let filteredRecipes = recipes.filter {
+                    $0.recipeName.contains(query)
+                }
+                favoriteRecipeList.accept(filteredRecipes)
+            }
+            allFavoriteRecipeList.accept(recipes)
+        case .failure(let error):
+            self.error.accept(error.description)
+        }
+    }
+    
+    private func validateQuery(query: String) -> Bool {
+        if query.isEmpty {
+            return false
+        } else {
+            return true
+        }
     }
 }
 
