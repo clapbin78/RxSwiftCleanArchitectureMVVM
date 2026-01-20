@@ -50,14 +50,19 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
         }.disposed(by: disposeBag)
         
         input.saveFavorite
-            .bind { recipe in
+            .withLatestFrom(input.query, resultSelector: { recipes, query in
+                return (recipes, query) })
+            .bind { [weak self] recipe, query in
                 // 즐겨찾기 추가
-        }.disposed(by: disposeBag)
+                self?.saveFavoriteRecipe(query: query, recipe: recipe)
+            }.disposed(by: disposeBag)
         
         input.removeFavorite
-            .bind { recipeId in
+            .withLatestFrom(input.query, resultSelector: { ($0, $1)})
+            .bind { [weak self] recipeId, query in
                 // 즐겨찾기 제거
-        }.disposed(by: disposeBag)
+                self?.removeFavoriteRecipe(query: query, recipeId: recipeId)
+            }.disposed(by: disposeBag)
         
         input.fetchMoreRecipeList
             .bind {
@@ -107,6 +112,26 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
             }
             allFavoriteRecipeList.accept(recipes)
         case .failure(let error):
+            self.error.accept(error.description)
+        }
+    }
+    
+    private func saveFavoriteRecipe(query: String, recipe: Recipe) {
+        let result = usecase.saveFavoriteRecipe(recipe: recipe)
+        switch result {
+        case .success:
+             getFavoriteRecipes(query: query)
+        case let .failure(error):
+            self.error.accept(error.description)
+        }
+    }
+    
+    private func removeFavoriteRecipe(query: String, recipeId: Int) {
+        let result = usecase.removeFavoriteRecipe(recipeId: recipeId)
+        switch result {
+        case .success:
+            getFavoriteRecipes(query: query)
+        case let .failure(error):
             self.error.accept(error.description)
         }
     }
