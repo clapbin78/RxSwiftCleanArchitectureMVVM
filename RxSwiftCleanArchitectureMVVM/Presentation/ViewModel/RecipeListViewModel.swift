@@ -20,6 +20,7 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
     private let fetchRecipeList = BehaviorRelay<[Recipe]>(value: [])
     private let allFavoriteRecipeList = BehaviorRelay<[Recipe]>(value: []) // fetchRecipe 즐겨찾기 여부를 위한 전체목록
     private let favoriteRecipeList = BehaviorRelay<[Recipe]>(value: []) // 목록에 보여줄 리스트
+    private var startIndex: Int = 1
     
     public init(usecase: RecipeListUsecase) {
         self.usecase = usecase
@@ -34,19 +35,20 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
     }
     
     public struct Output { // VC에게 전달할 뷰 데이터
-        let cellData: Observable<[Recipe]>
+        let cellData: Observable<[RecipeListCellData]>
         let error: Observable<String>
     }
     
     public func transform(input: Input) -> Output { // VC 이벤트 -> VM 데이터
         input.query.bind { [weak self] query in
             // fetchRecipeList, favoriteRecipeList
-            guard let isValidate = self?.validateQuery(query: query), isValidate else {
+            guard let self = self, validateQuery(query: query) else {
                 self?.getFavoriteRecipes(query: "")
                 return
             }
-            self?.fetchRecipes(query: query, startIndex: 0, endIndex: 0)
-            self?.getFavoriteRecipes(query: query)
+            startIndex = 1
+            fetchRecipes(query: query, startIndex: startIndex, endIndex: startIndex + 5)
+            getFavoriteRecipes(query: query)
         }.disposed(by: disposeBag)
         
         input.saveFavorite
@@ -65,14 +67,40 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
             }.disposed(by: disposeBag)
         
         input.fetchMoreRecipeList
-            .bind {
+            .withLatestFrom(input.query)
+            .bind { [weak self] query in
                 // 다음 페이지 fetch
+                guard let self = self else { return }
+                startIndex += 5
+                fetchRecipes(query: query, startIndex: startIndex, endIndex: startIndex + 5)
         }.disposed(by: disposeBag)
         
         // 탭 레시피 리스트, 즐겨찾기 리스트
-        let cellData: Observable<[Recipe]> = Observable.combineLatest(input.tabButtonType, fetchRecipeList, favoriteRecipeList).map { tabButtonType, fetchRecipeList, favoriteRecipeList in
-            let cellData: [Recipe] = []
+        let cellData: Observable<[RecipeListCellData]> = Observable.combineLatest(input.tabButtonType, fetchRecipeList, favoriteRecipeList, allFavoriteRecipeList)
+            .map { [weak self] tabButtonType, fetchRecipeList, favoriteRecipeList, allFavoriteRecipeList in
+            
+            var cellData: [RecipeListCellData] = []
+            guard let self = self else { return cellData }
+            
             // cellData 생성
+            switch tabButtonType {
+            case .all:
+                let favoriteTuple = usecase.checkFavoriteStatus(fetchRecipes: fetchRecipeList, favoriteRecipes: allFavoriteRecipeList)
+                let recipeCellList = favoriteTuple.map { recipe, isFavorite in
+                    RecipeListCellData.recipe(recipe: recipe, isFavorite: isFavorite)
+                }
+                
+            case .favorite:
+                let favoriteRecipeDictionary = usecase.convertListToDictionary(favoriteRecipes: favoriteRecipeList)
+                let keys = favoriteRecipeDictionary.keys.sorted()
+                keys.forEach { key in
+                    cellData.append(.header(key))
+                    if let recipes = favoriteRecipeDictionary[key] {
+                        cellData += recipes.map { RecipeListCellData.recipe(recipe: $0, isFavorite: true) }
+                    }
+                }
+            }
+            
             return cellData
         }
         
@@ -148,4 +176,9 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
 public enum TabButtonType {
     case all
     case favorite
+}
+
+public enum RecipeListCellData {
+    case recipe(recipe: Recipe, isFavorite: Bool)
+    case header(String)
 }
