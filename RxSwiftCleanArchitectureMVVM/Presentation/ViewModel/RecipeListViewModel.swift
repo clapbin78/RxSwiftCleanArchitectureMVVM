@@ -110,7 +110,7 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
     private func fetchRecipes(query: String, startIndex: Int, endIndex: Int) {
         guard let urlAllowedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
         Task {
-            let result = await usecase.fetchRecipes(startIndex: startIndex, endIndex: endIndex)
+            let result = await usecase.fetchRecipes(query: urlAllowedQuery, startIndex: startIndex, endIndex: endIndex)
             switch result {
             case let .success(recipes):
                 if let recipes = recipes.recipes {

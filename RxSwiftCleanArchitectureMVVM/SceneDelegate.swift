@@ -16,7 +16,30 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let _ = (scene as? UIWindowScene) else { return }
+        guard let _ = (scene as? UIWindowScene), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        guard let tabBarController = window?.rootViewController as? UITabBarController,
+              let viewControllers = tabBarController.viewControllers else {
+            return
+        }
+        let coreData = RecipeCoreData(viewContext: appDelegate.persistentContainer.viewContext)
+        let network = RecipeNetwork(manager: NetworkManager(session: RecipeSession()))
+        let recipeRepository = RecipeRepository(coreData: coreData, network: network)
+        let recipeListUsecase = RecipeListUsecase(repository: recipeRepository)
+        let recipeListViewModel = RecipeListViewModel(usecase: recipeListUsecase)
+        
+        for viewController in viewControllers {
+            switch viewController {
+            case let recipeListViewController as RecipeListViewController:
+                recipeListViewController.viewModel = recipeListViewModel
+                
+            case let favoriteListViewController as FavoriteListViewController:
+                favoriteListViewController.viewModel = recipeListViewModel
+                
+            default:
+                break
+            }
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

@@ -7,13 +7,13 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
+class RecipeListViewController: UIViewController {
+    var viewModel: RecipeListViewModelProtocol?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
     }
-
 
 }
 

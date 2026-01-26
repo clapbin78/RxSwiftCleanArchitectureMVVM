@@ -14,7 +14,7 @@ public struct RecipeRepository: RecipeRepositoryProtocol {
         self.network = network
     }
     
-    public func fetchRecipes(startIndex: Int, endIndex: Int) async -> Result<RecipeList, NetworkError> {
+    public func fetchRecipes(query: String, startIndex: Int, endIndex: Int) async -> Result<RecipeList, NetworkError> {
         await network.fetchRecipes(startIndex: startIndex, endIndex: endIndex)
     }
     
