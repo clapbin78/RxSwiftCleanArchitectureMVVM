@@ -10,7 +10,7 @@ import RxSwift
 import RxCocoa
 
 protocol RecipeListViewModelProtocol {
-    
+    func transform(input: RecipeListViewModel.Input) -> RecipeListViewModel.Output
 }
 
 public final class RecipeListViewModel: RecipeListViewModelProtocol {
@@ -27,7 +27,7 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
     }
     
     public struct Input { // VM에게 전달되어야 할 이벤트
-        let tabButtonType: Observable<TabButtonType>
+        let tabType: Observable<TabType>
         let query: Observable<String>
         let saveFavorite: Observable<Recipe>
         let removeFavorite: Observable<Int>
@@ -76,14 +76,14 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
         }.disposed(by: disposeBag)
         
         // 탭 레시피 리스트, 즐겨찾기 리스트
-        let cellData: Observable<[RecipeListCellData]> = Observable.combineLatest(input.tabButtonType, fetchRecipeList, favoriteRecipeList, allFavoriteRecipeList)
-            .map { [weak self] tabButtonType, fetchRecipeList, favoriteRecipeList, allFavoriteRecipeList in
+        let cellData: Observable<[RecipeListCellData]> = Observable.combineLatest(input.tabType, fetchRecipeList, favoriteRecipeList, allFavoriteRecipeList)
+            .map { [weak self] tabType, fetchRecipeList, favoriteRecipeList, allFavoriteRecipeList in
             
             var cellData: [RecipeListCellData] = []
             guard let self = self else { return cellData }
             
             // cellData 생성
-            switch tabButtonType {
+            switch tabType {
             case .all:
                 let favoriteTuple = usecase.checkFavoriteStatus(fetchRecipes: fetchRecipeList, favoriteRecipes: allFavoriteRecipeList)
                 let recipeCellList = favoriteTuple.map { recipe, isFavorite in
@@ -173,7 +173,7 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
     }
 }
 
-public enum TabButtonType {
+public enum TabType {
     case all
     case favorite
 }

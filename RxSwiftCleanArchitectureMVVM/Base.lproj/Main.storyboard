@@ -4,6 +4,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -14,9 +15,36 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <searchBar contentMode="redraw" placeholder="검색어를 입력해주세요." translatesAutoresizingMaskIntoConstraints="NO" id="iON-3M-RhM">
+                                <rect key="frame" x="18" y="80" width="357" height="64"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="search"/>
+                                <scopeButtonTitles>
+                                    <string>Title</string>
+                                    <string>Title</string>
+                                </scopeButtonTitles>
+                            </searchBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eLK-GQ-2T3">
+                                <rect key="frame" x="0.0" y="144" width="393" height="591"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <constraints>
+                            <constraint firstItem="iON-3M-RhM" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="18" id="7PO-Fo-Nhr"/>
+                            <constraint firstItem="eLK-GQ-2T3" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="M2f-zN-IPg"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="eLK-GQ-2T3" secondAttribute="bottom" id="O2R-Q3-1O7"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="eLK-GQ-2T3" secondAttribute="trailing" id="Qpx-TZ-H1B"/>
+                            <constraint firstAttribute="trailing" secondItem="iON-3M-RhM" secondAttribute="trailing" constant="18" id="dAe-hW-bEk"/>
+                            <constraint firstItem="iON-3M-RhM" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="80" id="kUr-Rt-U8T"/>
+                            <constraint firstItem="eLK-GQ-2T3" firstAttribute="top" secondItem="iON-3M-RhM" secondAttribute="bottom" id="qEk-jZ-feS"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="레시피" image="pencil.and.list.clipboard" catalog="system" id="tCC-IO-qJP"/>
+                    <connections>
+                        <outlet property="recipeListSearchBar" destination="iON-3M-RhM" id="ISa-gP-xxT"/>
+                        <outlet property="recipeListTableView" destination="eLK-GQ-2T3" id="hGR-bg-pqL"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -29,9 +57,37 @@
                     <view key="view" contentMode="scaleToFill" id="cLx-FJ-Tuu">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <searchBar contentMode="redraw" placeholder="검색어를 입력해주세요." translatesAutoresizingMaskIntoConstraints="NO" id="vwe-St-2je">
+                                <rect key="frame" x="18" y="80" width="357" height="64"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="search"/>
+                                <scopeButtonTitles>
+                                    <string>Title</string>
+                                    <string>Title</string>
+                                </scopeButtonTitles>
+                            </searchBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="gQP-gO-v7h">
+                                <rect key="frame" x="0.0" y="144" width="393" height="591"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="Pbh-b8-Qar"/>
+                        <constraints>
+                            <constraint firstItem="gQP-gO-v7h" firstAttribute="top" secondItem="vwe-St-2je" secondAttribute="bottom" id="8Uf-Qw-8Pl"/>
+                            <constraint firstItem="gQP-gO-v7h" firstAttribute="top" secondItem="vwe-St-2je" secondAttribute="bottom" id="JTF-Zs-csR"/>
+                            <constraint firstItem="vwe-St-2je" firstAttribute="leading" secondItem="Pbh-b8-Qar" secondAttribute="leading" constant="18" id="Ptd-LU-dLE"/>
+                            <constraint firstItem="gQP-gO-v7h" firstAttribute="bottom" secondItem="Pbh-b8-Qar" secondAttribute="bottom" id="Uec-hg-Scs"/>
+                            <constraint firstItem="Pbh-b8-Qar" firstAttribute="trailing" secondItem="vwe-St-2je" secondAttribute="trailing" constant="18" id="job-tJ-jHI"/>
+                            <constraint firstItem="vwe-St-2je" firstAttribute="top" secondItem="cLx-FJ-Tuu" secondAttribute="top" constant="80" id="l2k-pG-8Ws"/>
+                            <constraint firstItem="gQP-gO-v7h" firstAttribute="leading" secondItem="Pbh-b8-Qar" secondAttribute="leading" id="oGf-5B-5l8"/>
+                            <constraint firstItem="gQP-gO-v7h" firstAttribute="trailing" secondItem="Pbh-b8-Qar" secondAttribute="trailing" id="qI9-Xs-gIC"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="즐겨찾기" image="star.square" catalog="system" id="BG6-gG-g7P"/>
+                    <connections>
+                        <outlet property="favoriteListSearchBar" destination="vwe-St-2je" id="Xhu-3O-mOh"/>
+                        <outlet property="favoriteListTableView" destination="gQP-gO-v7h" id="UDs-f0-x1A"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ipd-9T-pd1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -60,5 +116,8 @@
     <resources>
         <image name="pencil.and.list.clipboard" catalog="system" width="114" height="128"/>
         <image name="star.square" catalog="system" width="128" height="114"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>
