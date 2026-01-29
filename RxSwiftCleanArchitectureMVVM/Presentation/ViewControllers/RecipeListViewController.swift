@@ -17,7 +17,7 @@ class RecipeListViewController: UIViewController {
     private let fetchMore = PublishRelay<Void>()
     
     @IBOutlet weak var recipeListSearchBar: UISearchBar!
-    @IBOutlet weak var recipeListTableView: UITableView!
+    @IBOutlet weak var recipeListCollectionView: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,8 +28,8 @@ class RecipeListViewController: UIViewController {
         let query = recipeListSearchBar.rx.text.orEmpty.debounce(.microseconds(300), scheduler: MainScheduler.instance)
         let output = viewModel?.transform(input: RecipeListViewModel.Input(tabType: .just(.all), query: query, saveFavorite: saveFavorite.asObservable(), removeFavorite: removeFavorite.asObservable(), fetchMoreRecipeList: fetchMore.asObservable()))
         
-        output?.cellData.bind(to: recipeListTableView.rx.items) { tableView, index, item in
-            return UITableViewCell()
+        output?.cellData.bind(to: recipeListCollectionView.rx.items) { collectionView, index, item in
+            return UICollectionViewCell()
         }.disposed(by: disposeBag)
         
         output?.error.bind { [weak self] errorMessage in
@@ -41,3 +41,25 @@ class RecipeListViewController: UIViewController {
 
 }
 
+extension RecipeListViewController: UICollectionViewDelegateFlowLayout {
+    
+}
+
+extension RecipeListViewController: UICollectionViewDelegate {
+    
+}
+
+extension RecipeListViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "recipeListCell", for: indexPath) as? RecipeListCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        return cell
+    }
+    
+    
+}
