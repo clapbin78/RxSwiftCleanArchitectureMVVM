@@ -13,7 +13,7 @@ class RecipeListViewController: UIViewController {
     var viewModel: RecipeListViewModelProtocol?
     private let disposeBag = DisposeBag()
     private let saveFavorite = PublishRelay<Recipe>()
-    private let removeFavorite = PublishRelay<Int>()
+    private let removeFavorite = PublishRelay<String>()
     private let fetchMore = PublishRelay<Void>()
     
     @IBOutlet weak var recipeListSearchBar: UISearchBar!
@@ -22,14 +22,17 @@ class RecipeListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        bindViewModel()
     }
 
     private func bindViewModel() {
         let query = recipeListSearchBar.rx.text.orEmpty.debounce(.microseconds(300), scheduler: MainScheduler.instance)
         let output = viewModel?.transform(input: RecipeListViewModel.Input(tabType: .just(.all), query: query, saveFavorite: saveFavorite.asObservable(), removeFavorite: removeFavorite.asObservable(), fetchMoreRecipeList: fetchMore.asObservable()))
         
-        output?.cellData.bind(to: recipeListCollectionView.rx.items) { collectionView, index, item in
-            return UICollectionViewCell()
+        output?.cellData.bind(to: recipeListCollectionView.rx.items) { collectionView, index, cellData in
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "recipeListCollectionViewCell", for: IndexPath(row: index, section: 0)) as? RecipeListCollectionViewCell else { return RecipeListCollectionViewCell() }
+            cell.setup(cellData: cellData)
+            return cell
         }.disposed(by: disposeBag)
         
         output?.error.bind { [weak self] errorMessage in
@@ -43,6 +46,13 @@ class RecipeListViewController: UIViewController {
 
 extension RecipeListViewController: UICollectionViewDelegateFlowLayout {
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let spacing: CGFloat = 5
+        let width: CGFloat = (collectionView.bounds.width - spacing * 2) / 3
+        let height: CGFloat = width + width / 2
+        
+        return CGSize(width: width, height: height)
+    }
 }
 
 extension RecipeListViewController: UICollectionViewDelegate {
