@@ -11,7 +11,7 @@ import CoreData
 public protocol RecipeCoreDataProtocol {
     func getFavoriteRecipes() -> Result<[Recipe], CoreDataError>
     func saveFavoriteRecipe(recipe: Recipe) -> Result<Bool, CoreDataError>
-    func removeFavoriteRecipe(recipeId: Int) -> Result<Bool, CoreDataError>
+    func removeFavoriteRecipe(recipeSequence: String) -> Result<Bool, CoreDataError>
 }
 
 public struct RecipeCoreData: RecipeCoreDataProtocol {
@@ -25,9 +25,9 @@ public struct RecipeCoreData: RecipeCoreDataProtocol {
         do {
             let result = try viewContext.fetch(fetchRequest)
             let recipeList: [Recipe] = result.compactMap { favoriteRecipe in
-                guard let recipeName = favoriteRecipe.recipeName, let recipeParts = favoriteRecipe.recipeParts, let recipeWay = favoriteRecipe.recipeWay, let recipePat = favoriteRecipe.recipePat, let infoWeight = favoriteRecipe.infoWeight, let infoEnergy = favoriteRecipe.infoEnergy, let infoCar = favoriteRecipe.infoCar, let infoPro = favoriteRecipe.infoPro, let infoFat = favoriteRecipe.infoFat, let infoNa = favoriteRecipe.infoNa else { return nil }
+                guard let recipeSequence = favoriteRecipe.recipeSequence, let recipeName = favoriteRecipe.recipeName, let recipeParts = favoriteRecipe.recipeParts, let recipeWay = favoriteRecipe.recipeWay, let recipePat = favoriteRecipe.recipePat, let infoWeight = favoriteRecipe.infoWeight, let infoEnergy = favoriteRecipe.infoEnergy, let infoCar = favoriteRecipe.infoCar, let infoPro = favoriteRecipe.infoPro, let infoFat = favoriteRecipe.infoFat, let infoNa = favoriteRecipe.infoNa else { return nil }
                 
-                return Recipe(id: Int(favoriteRecipe.id), recipeName: recipeName, recipeParts: recipeParts, recipeWay: recipeWay, recipePat: recipePat,
+                return Recipe(recipeSequence: recipeSequence, recipeName: recipeName, recipeParts: recipeParts, recipeWay: recipeWay, recipePat: recipePat,
                               infoWeight: infoWeight, infoEnergy: infoEnergy, infoCar: infoCar, infoPro: infoPro, infoFat: infoFat, infoNa: infoNa,
                               bigMainImage: favoriteRecipe.bigMainImage, smallMainImage: favoriteRecipe.smallMainImage, recipeNatTips: favoriteRecipe.recipeNatTips, hashTag: favoriteRecipe.hashTag,
                               manual01: favoriteRecipe.manual01, manual02: favoriteRecipe.manual02, manual03: favoriteRecipe.manual03, manual04: favoriteRecipe.manual04, manual05: favoriteRecipe.manual05, manual06: favoriteRecipe.manual06, manual07: favoriteRecipe.manual07, manual08: favoriteRecipe.manual08, manual09: favoriteRecipe.manual09, manual10: favoriteRecipe.manual10, manual11: favoriteRecipe.manual11, manual12: favoriteRecipe.manual12, manual13: favoriteRecipe.manual13, manual14: favoriteRecipe.manual14, manual15: favoriteRecipe.manual15, manual16: favoriteRecipe.manual16, manual17: favoriteRecipe.manual17, manual18: favoriteRecipe.manual18, manual19: favoriteRecipe.manual19, manual20: favoriteRecipe.manual20,
@@ -45,7 +45,7 @@ public struct RecipeCoreData: RecipeCoreDataProtocol {
             return .failure(.entityNotFound("FavoriteRecipe entity not found"))
         }
         let recipeObject = NSManagedObject(entity: entity, insertInto: viewContext)
-        recipeObject.setValue(recipe.id, forKey: "id")
+        recipeObject.setValue(recipe.recipeSequence, forKey: "recipeSequence")
         recipeObject.setValue(recipe.recipeName, forKey: "recipeName")
         recipeObject.setValue(recipe.recipeParts, forKey: "recipeParts")
         recipeObject.setValue(recipe.recipeWay, forKey: "recipeWay")
@@ -109,9 +109,9 @@ public struct RecipeCoreData: RecipeCoreDataProtocol {
         }
     }
     
-    public func removeFavoriteRecipe(recipeId: Int) -> Result<Bool, CoreDataError> {
+    public func removeFavoriteRecipe(recipeSequence: String) -> Result<Bool, CoreDataError> {
         let fetchRequest: NSFetchRequest<FavoriteRecipe> = FavoriteRecipe.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id == %d", recipeId)
+        fetchRequest.predicate = NSPredicate(format: "recipeSequence == %d", recipeSequence)
         
         do {
             let result = try viewContext.fetch(fetchRequest)

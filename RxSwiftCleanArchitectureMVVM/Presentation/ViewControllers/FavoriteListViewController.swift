@@ -13,7 +13,7 @@ class FavoriteListViewController: UIViewController {
     var viewModel: RecipeListViewModelProtocol?
     private let disposeBag = DisposeBag()
     private let saveFavorite = PublishRelay<Recipe>()
-    private let removeFavorite = PublishRelay<Int>()
+    private let removeFavorite = PublishRelay<String>()
     private let fetchMore = PublishRelay<Void>()
     
     @IBOutlet weak var favoriteListSearchBar: UISearchBar!

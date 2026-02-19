@@ -16,13 +16,13 @@ public enum CoreDataError: Error {
     public var description: String {
         switch self {
         case .entityNotFound(let message):
-            return message
+            "Entity Not Found. message: \(message)"
         case .saveFailed(let message):
-            return message
+            "Save Failed. message: \(message)"
         case .readFailed(let message):
-            return message
+            "Read Failed. message: \(message)"
         case .removeFailed(let message):
-            return message
+            "Remove Failed. message: \(message)"
         }
     }
 }

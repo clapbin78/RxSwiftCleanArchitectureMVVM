@@ -8,11 +8,11 @@
 import Foundation
 
 public protocol RecipeListUsecaseProtocol {
-    func fetchRecipes(query: String, startIndex: Int, endIndex: Int) async -> Result<RecipeList, NetworkError>
+    func fetchRecipes(query: String, startIndex: Int, endIndex: Int) async -> Result<RecipeApiResult, NetworkError>
     func getFavoriteRecipes() -> Result<[Recipe], CoreDataError>
     func saveFavoriteRecipe(recipe: Recipe) -> Result<Bool, CoreDataError>
-    func removeFavoriteRecipe(recipeId: Int) -> Result<Bool, CoreDataError>
-    func checkFavoriteStatus(fetchRecipes: [Recipe], favoriteRecipes: [Recipe]) -> [(recipe: Recipe, isFavorite: Bool)]
+    func removeFavoriteRecipe(recipeSequence: String) -> Result<Bool, CoreDataError>
+    func checkFavoriteState(fetchRecipes: [Recipe], favoriteRecipes: [Recipe]) -> [(recipe: Recipe, isFavorite: Bool)]
     func convertListToDictionary(favoriteRecipes: [Recipe]) -> [String: [Recipe]]
 }
 
@@ -23,26 +23,23 @@ public struct RecipeListUsecase: RecipeListUsecaseProtocol {
         self.repository = repository
     }
     
-    public func fetchRecipes(query: String,startIndex: Int, endIndex: Int) async -> Result<RecipeList, NetworkError> {
+    public func fetchRecipes(query: String,startIndex: Int, endIndex: Int) async -> Result<RecipeApiResult, NetworkError> {
         await repository.fetchRecipes(query: query, startIndex: startIndex, endIndex: endIndex)
     }
     
     public func getFavoriteRecipes() -> Result<[Recipe], CoreDataError> {
-        // 일단 failure로 해놓음
-        .failure(.readFailed(""))
+        repository.getFavoriteRecipes()
     }
     
     public func saveFavoriteRecipe(recipe: Recipe) -> Result<Bool, CoreDataError> {
-        // 일단 failure로 해놓음
-        .failure(.saveFailed(""))
+        repository.saveFavoriteRecipe(recipe: recipe)
     }
     
-    public func removeFavoriteRecipe(recipeId: Int) -> Result<Bool, CoreDataError> {
-        // 일단 failure로 해놓음
-        .failure(.removeFailed(""))
+    public func removeFavoriteRecipe(recipeSequence: String) -> Result<Bool, CoreDataError> {
+        repository.removeFavoriteRecipe(recipeSequence: recipeSequence)
     }
     
-    public func checkFavoriteStatus(fetchRecipes: [Recipe], favoriteRecipes: [Recipe]) -> [(recipe: Recipe, isFavorite: Bool)] {
+    public func checkFavoriteState(fetchRecipes: [Recipe], favoriteRecipes: [Recipe]) -> [(recipe: Recipe, isFavorite: Bool)] {
         let favoriteSet = Set(favoriteRecipes)
         return fetchRecipes.map { recipe in
             if favoriteSet.contains(recipe) {

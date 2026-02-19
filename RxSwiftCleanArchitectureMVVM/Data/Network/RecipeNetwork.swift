@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol RecipeNetworkProtocol {
-    func fetchRecipes(startIndex: Int, endIndex: Int) async -> Result<RecipeList, NetworkError>
+    func fetchRecipes(query: String, startIndex: Int, endIndex: Int) async -> Result<RecipeApiResult, NetworkError>
 }
 
 final public class RecipeNetwork: RecipeNetworkProtocol {

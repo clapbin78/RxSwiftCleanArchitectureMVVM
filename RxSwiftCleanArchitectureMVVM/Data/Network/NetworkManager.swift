@@ -31,8 +31,8 @@ public class NetworkManager: NetworkManagerProtocol {
         guard let response = result.response else { return .failure(.invalidResponse) }
         if 200..<400 ~= response.statusCode {
             do {
-                let data = try JSONDecoder().decode(T.self, from: data)
-                return .success(data)
+                let decodedData = try JSONDecoder().decode(T.self, from: data)
+                return .success(decodedData)
             } catch {
                 return .failure(.decodingError(error.localizedDescription))
             }

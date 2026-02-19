@@ -20,7 +20,7 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
     private let fetchRecipeList = BehaviorRelay<[Recipe]>(value: [])
     private let allFavoriteRecipeList = BehaviorRelay<[Recipe]>(value: []) // fetchRecipe 즐겨찾기 여부를 위한 전체목록
     private let favoriteRecipeList = BehaviorRelay<[Recipe]>(value: []) // 목록에 보여줄 리스트
-    private var startIndex: Int = 1
+    private var startIndex: Int = 0
     
     public init(usecase: RecipeListUsecase) {
         self.usecase = usecase
@@ -30,7 +30,7 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
         let tabType: Observable<TabType>
         let query: Observable<String>
         let saveFavorite: Observable<Recipe>
-        let removeFavorite: Observable<Int>
+        let removeFavorite: Observable<String>
         let fetchMoreRecipeList: Observable<Void>
     }
     
@@ -46,8 +46,8 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
                 self?.getFavoriteRecipes(query: "")
                 return
             }
-            startIndex = 1
-            fetchRecipes(query: query, startIndex: startIndex, endIndex: startIndex + 5)
+            startIndex = 0
+            fetchRecipes(query: query, startIndex: startIndex, endIndex: startIndex + 18)
             getFavoriteRecipes(query: query)
         }.disposed(by: disposeBag)
         
@@ -61,9 +61,9 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
         
         input.removeFavorite
             .withLatestFrom(input.query, resultSelector: { ($0, $1)})
-            .bind { [weak self] recipeId, query in
+            .bind { [weak self] recipeSequence, query in
                 // 즐겨찾기 제거
-                self?.removeFavoriteRecipe(query: query, recipeId: recipeId)
+                self?.removeFavoriteRecipe(query: query, recipeSequence: recipeSequence)
             }.disposed(by: disposeBag)
         
         input.fetchMoreRecipeList
@@ -71,8 +71,8 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
             .bind { [weak self] query in
                 // 다음 페이지 fetch
                 guard let self = self else { return }
-                startIndex += 5
-                fetchRecipes(query: query, startIndex: startIndex, endIndex: startIndex + 5)
+                startIndex += 18
+                fetchRecipes(query: query, startIndex: startIndex, endIndex: startIndex + 18)
         }.disposed(by: disposeBag)
         
         // 탭 레시피 리스트, 즐겨찾기 리스트
@@ -85,10 +85,11 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
             // cellData 생성
             switch tabType {
             case .all:
-                let favoriteTuple = usecase.checkFavoriteStatus(fetchRecipes: fetchRecipeList, favoriteRecipes: allFavoriteRecipeList)
-                let recipeCellList = favoriteTuple.map { recipe, isFavorite in
+                let tuple = usecase.checkFavoriteState(fetchRecipes: fetchRecipeList, favoriteRecipes: allFavoriteRecipeList)
+                let recipeCellList = tuple.map { recipe, isFavorite in
                     RecipeListCellData.recipe(recipe: recipe, isFavorite: isFavorite)
                 }
+                return recipeCellList
                 
             case .favorite:
                 let favoriteRecipeDictionary = usecase.convertListToDictionary(favoriteRecipes: favoriteRecipeList)
@@ -113,7 +114,7 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
             let result = await usecase.fetchRecipes(query: urlAllowedQuery, startIndex: startIndex, endIndex: endIndex)
             switch result {
             case let .success(recipes):
-                if let recipes = recipes.recipes {
+                if let recipes = recipes.cookRecipes.recipes {
                     if startIndex == 0 {
                         fetchRecipeList.accept(recipes)
                     } else {
@@ -154,8 +155,8 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
         }
     }
     
-    private func removeFavoriteRecipe(query: String, recipeId: Int) {
-        let result = usecase.removeFavoriteRecipe(recipeId: recipeId)
+    private func removeFavoriteRecipe(query: String, recipeSequence: String) {
+        let result = usecase.removeFavoriteRecipe(recipeSequence: recipeSequence)
         switch result {
         case .success:
             getFavoriteRecipes(query: query)

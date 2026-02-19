@@ -14,8 +14,8 @@ public struct RecipeRepository: RecipeRepositoryProtocol {
         self.network = network
     }
     
-    public func fetchRecipes(query: String, startIndex: Int, endIndex: Int) async -> Result<RecipeList, NetworkError> {
-        await network.fetchRecipes(startIndex: startIndex, endIndex: endIndex)
+    public func fetchRecipes(query: String, startIndex: Int, endIndex: Int) async -> Result<RecipeApiResult, NetworkError> {
+        await network.fetchRecipes(query: query, startIndex: startIndex, endIndex: endIndex)
     }
     
     public func getFavoriteRecipes() -> Result<[Recipe], CoreDataError> {
@@ -26,8 +26,8 @@ public struct RecipeRepository: RecipeRepositoryProtocol {
         coreData.saveFavoriteRecipe(recipe: recipe)
     }
     
-    public func removeFavoriteRecipe(recipeId: Int) -> Result<Bool, CoreDataError> {
-        coreData.removeFavoriteRecipe(recipeId: recipeId)
+    public func removeFavoriteRecipe(recipeSequence: String) -> Result<Bool, CoreDataError> {
+        coreData.removeFavoriteRecipe(recipeSequence: recipeSequence)
     }
     
     

@@ -36,9 +36,7 @@ class RecipeListViewController: UIViewController {
         }.disposed(by: disposeBag)
         
         output?.error.bind { [weak self] errorMessage in
-            let alert = UIAlertController(title: "Error", message: errorMessage, preferredStyle: .alert)
-            alert.addAction(.init(title: "confirm", style: .default))
-            self?.present(alert, animated: true)
+            print("bindViewModel() Error Message:", errorMessage)
         }.disposed(by: disposeBag)
     }
 
