@@ -2,13 +2,13 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24512" systemVersion="25C56" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="FavoriteRecipe" representedClassName="FavoriteRecipe" syncable="YES" codeGenerationType="class">
         <attribute name="bigMainImage" optional="YES" attributeType="String"/>
-        <attribute name="hashTag" attributeType="String"/>
-        <attribute name="infoCar" attributeType="String"/>
-        <attribute name="infoEnergy" attributeType="String"/>
-        <attribute name="infoFat" attributeType="String"/>
-        <attribute name="infoNa" attributeType="String"/>
-        <attribute name="infoPro" attributeType="String"/>
-        <attribute name="infoWeight" attributeType="String"/>
+        <attribute name="hashTag" optional="YES" attributeType="String"/>
+        <attribute name="infoCar" optional="YES" attributeType="String"/>
+        <attribute name="infoEnergy" optional="YES" attributeType="String"/>
+        <attribute name="infoFat" optional="YES" attributeType="String"/>
+        <attribute name="infoNa" optional="YES" attributeType="String"/>
+        <attribute name="infoPro" optional="YES" attributeType="String"/>
+        <attribute name="infoWeight" optional="YES" attributeType="String"/>
         <attribute name="manual01" optional="YES" attributeType="String"/>
         <attribute name="manual02" optional="YES" attributeType="String"/>
         <attribute name="manual03" optional="YES" attributeType="String"/>
@@ -51,10 +51,10 @@
         <attribute name="manualImg20" optional="YES" attributeType="String"/>
         <attribute name="recipeName" attributeType="String"/>
         <attribute name="recipeNatTips" optional="YES" attributeType="String"/>
-        <attribute name="recipeParts" attributeType="String"/>
-        <attribute name="recipePat" attributeType="String"/>
+        <attribute name="recipeParts" optional="YES" attributeType="String"/>
+        <attribute name="recipePat" optional="YES" attributeType="String"/>
         <attribute name="recipeSequence" attributeType="String"/>
-        <attribute name="recipeWay" attributeType="String"/>
+        <attribute name="recipeWay" optional="YES" attributeType="String"/>
         <attribute name="smallMainImage" optional="YES" attributeType="String"/>
     </entity>
 </model>
