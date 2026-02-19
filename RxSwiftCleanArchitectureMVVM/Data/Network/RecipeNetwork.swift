@@ -17,8 +17,8 @@ final public class RecipeNetwork: RecipeNetworkProtocol {
         self.manager = manager
     }
     
-    public func fetchRecipes(startIndex: Int, endIndex: Int) async -> Result<RecipeList, NetworkError> {
-        let url = "http://openapi.foodsafetykorea.go.kr/api/{personalAuthenticationKey}/COOKRCP01/json/\(startIndex)/\(endIndex)"
+    public func fetchRecipes(query: String, startIndex: Int, endIndex: Int) async -> Result<RecipeApiResult, NetworkError> {
+        let url = "https://openapi.foodsafetykorea.go.kr/api/{personalAuthenticationKey}/COOKRCP01/json/\(startIndex)/\(endIndex)/RCP_NM=\(query)"
         return await manager.fetchData(url: url, method: .get)
     }
 }
