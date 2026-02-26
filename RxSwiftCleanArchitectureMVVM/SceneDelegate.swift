@@ -26,15 +26,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let network = RecipeNetwork(manager: NetworkManager(session: RecipeSession()))
         let recipeRepository = RecipeRepository(coreData: coreData, network: network)
         let recipeListUsecase = RecipeListUsecase(repository: recipeRepository)
-        let recipeListViewModel = RecipeListViewModel(usecase: recipeListUsecase)
         
         for viewController in viewControllers {
             switch viewController {
             case let recipeListViewController as RecipeListViewController:
-                recipeListViewController.viewModel = recipeListViewModel
+                recipeListViewController.viewModel = RecipeListViewModel(usecase: recipeListUsecase)
                 
             case let favoriteListViewController as FavoriteListViewController:
-                favoriteListViewController.viewModel = recipeListViewModel
+                favoriteListViewController.viewModel = RecipeListViewModel(usecase: recipeListUsecase)
                 
             default:
                 break
