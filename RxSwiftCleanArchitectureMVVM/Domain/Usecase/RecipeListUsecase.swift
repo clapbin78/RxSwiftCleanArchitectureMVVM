@@ -40,13 +40,9 @@ public struct RecipeListUsecase: RecipeListUsecaseProtocol {
     }
     
     public func checkFavoriteState(fetchRecipes: [Recipe], favoriteRecipes: [Recipe]) -> [(recipe: Recipe, isFavorite: Bool)] {
-        let favoriteSet = Set(favoriteRecipes)
+        let recipeSequences = Set(favoriteRecipes.map { $0.recipeSequence })
         return fetchRecipes.map { recipe in
-            if favoriteSet.contains(recipe) {
-                return (recipe: recipe, isFavorite: true)
-            } else {
-                return (recipe: recipe, isFavorite: false)
-            }
+            return (recipe: recipe, isFavorite: recipeSequences.contains(recipe.recipeSequence))
         }
     }
     
