@@ -7,8 +7,10 @@
 
 import UIKit
 import Kingfisher
+import RxSwift
 
 final class RecipeListCollectionViewCell: UICollectionViewCell {
+    public var disposeBag = DisposeBag()
     
     @IBOutlet weak var thumbnailImageView: UIImageView!
     @IBOutlet weak var recipeName: UILabel!
@@ -19,5 +21,10 @@ final class RecipeListCollectionViewCell: UICollectionViewCell {
         thumbnailImageView.kf.setImage(with: URL(string: (recipe.smallMainImage?.replacingOccurrences(of: "http://", with: "https://") ?? recipe.bigMainImage?.replacingOccurrences(of: "http://", with: "https://")) ?? ""))
         recipeName.text = recipe.recipeName
         favoriteButton.isSelected = isFavorite
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
     }
 }

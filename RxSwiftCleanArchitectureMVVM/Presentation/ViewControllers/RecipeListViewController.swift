@@ -29,13 +29,25 @@ class RecipeListViewController: UIViewController {
         let query = recipeListSearchBar.rx.text.orEmpty.debounce(.microseconds(300), scheduler: MainScheduler.instance)
         let output = viewModel?.transform(input: RecipeListViewModel.Input(tabType: .just(.all), query: query, saveFavorite: saveFavorite.asObservable(), removeFavorite: removeFavorite.asObservable(), fetchMoreRecipeList: fetchMore.asObservable()))
         
-        output?.cellData.bind(to: recipeListCollectionView.rx.items) { collectionView, index, cellData in
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "recipeListCollectionViewCell", for: IndexPath(row: index, section: 0)) as? RecipeListCollectionViewCell else { return RecipeListCollectionViewCell() }
+        output?.cellData.bind(to: recipeListCollectionView.rx.items) { [weak self] collectionView, index, cellData in
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "recipeCollectionViewCell", for: IndexPath(row: index, section: 0)) as? RecipeListCollectionViewCell else { return RecipeListCollectionViewCell() }
+            
             cell.setup(cellData: cellData)
+            
+            if case let .recipe(recipe, isFavorite) = cellData {
+                cell.favoriteButton.rx.tap.bind {
+                    if isFavorite {
+                        self?.removeFavorite.accept(recipe.recipeSequence)
+                    } else {
+                        self?.saveFavorite.accept(recipe)
+                    }
+                }.disposed(by: cell.disposeBag)
+            }
+            
             return cell
         }.disposed(by: disposeBag)
         
-        output?.error.bind { [weak self] errorMessage in
+        output?.error.bind { errorMessage in
             print("bindViewModel() Error Message:", errorMessage)
         }.disposed(by: disposeBag)
     }
@@ -51,23 +63,4 @@ extension RecipeListViewController: UICollectionViewDelegateFlowLayout {
         
         return CGSize(width: width, height: height)
     }
-}
-
-extension RecipeListViewController: UICollectionViewDelegate {
-    
-}
-
-extension RecipeListViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "recipeListCell", for: indexPath) as? RecipeListCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        return cell
-    }
-    
-    
 }

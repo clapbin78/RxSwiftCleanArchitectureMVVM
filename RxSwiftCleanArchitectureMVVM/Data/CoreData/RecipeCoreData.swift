@@ -111,7 +111,7 @@ public struct RecipeCoreData: RecipeCoreDataProtocol {
     
     public func removeFavoriteRecipe(recipeSequence: String) -> Result<Bool, CoreDataError> {
         let fetchRequest: NSFetchRequest<FavoriteRecipe> = FavoriteRecipe.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "recipeSequence == %d", recipeSequence)
+        fetchRequest.predicate = NSPredicate(format: "recipeSequence == %@", recipeSequence)
         
         do {
             let result = try viewContext.fetch(fetchRequest)

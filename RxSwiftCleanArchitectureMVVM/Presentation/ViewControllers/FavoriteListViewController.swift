@@ -22,44 +22,45 @@ class FavoriteListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        bindViewModel()
     }
     
     private func bindViewModel() {
         let query = favoriteListSearchBar.rx.text.orEmpty.debounce(.microseconds(300), scheduler: MainScheduler.instance)
         let output = viewModel?.transform(input: RecipeListViewModel.Input(tabType: .just(.favorite), query: query, saveFavorite: saveFavorite.asObservable(), removeFavorite: removeFavorite.asObservable(), fetchMoreRecipeList: fetchMore.asObservable()))
         
-        output?.cellData.bind(to: favoriteListCollectionView.rx.items) { collectionView, index, item in
-            return UICollectionViewCell()
+        output?.cellData.bind(to: favoriteListCollectionView.rx.items) { [weak self] collectionView, index, cellData in
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "recipeCollectionViewCell", for: IndexPath(row: index, section: 0)) as? RecipeListCollectionViewCell else { return RecipeListCollectionViewCell() }
+            
+            cell.setup(cellData: cellData)
+            
+            if case let .recipe(recipe, isFavorite) = cellData {
+                cell.favoriteButton.rx.tap.bind {
+                    if isFavorite {
+                        self?.removeFavorite.accept(recipe.recipeSequence)
+                    } else {
+                        self?.saveFavorite.accept(recipe)
+                    }
+                }.disposed(by: cell.disposeBag)
+            }
+            
+            return cell
         }.disposed(by: disposeBag)
         
-        output?.error.bind { [weak self] errorMessage in
-            let alert = UIAlertController(title: "Error", message: errorMessage, preferredStyle: .alert)
-            alert.addAction(.init(title: "confirm", style: .default))
-            self?.present(alert, animated: true)
+        output?.error.bind { errorMessage in
+            print("favorite bindViewModel() Error Message:", errorMessage)
         }.disposed(by: disposeBag)
     }
+    
     
 }
 
 extension FavoriteListViewController: UICollectionViewDelegateFlowLayout {
-    
-}
-
-extension FavoriteListViewController: UICollectionViewDelegate {
-    
-}
-
-extension FavoriteListViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        1
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let spacing: CGFloat = 5
+        let width: CGFloat = (collectionView.bounds.width - spacing * 2) / 3
+        let height: CGFloat = width + width / 2
+        
+        return CGSize(width: width, height: height)
     }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "favoriteListCell", for: indexPath) as? FavoriteListCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        return cell
-    }
-    
-    
 }
