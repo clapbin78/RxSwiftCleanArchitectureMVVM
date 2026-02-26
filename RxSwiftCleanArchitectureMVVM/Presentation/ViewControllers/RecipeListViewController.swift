@@ -22,6 +22,7 @@ class RecipeListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        bindView()
         bindViewModel()
     }
 
@@ -50,6 +51,28 @@ class RecipeListViewController: UIViewController {
         output?.error.bind { errorMessage in
             print("bindViewModel() Error Message:", errorMessage)
         }.disposed(by: disposeBag)
+    }
+    
+    private func bindView() {
+        recipeListCollectionView.rx.prefetchItems
+            .bind { [weak self] indexPaths in
+                guard let self = self else { return }
+                
+                let totalItems = self.recipeListCollectionView.numberOfItems(inSection: 0)
+                guard totalItems > 0 else { return }
+                
+                // 1. prefetch로 들어온 인덱스 중 가장 큰 값 찾기
+                guard let maxRequestedIndex = indexPaths.map({ $0.item }).max() else { return }
+                
+                // 2. Threshold(여유분)를 1화면 분량(18개) 또는 최소 4~5줄(12~15개)로 넉넉히 설정
+                let threshold = 18
+                
+                // 3. 현재 스크롤 위치가 끝에서 1화면 분량(18개) 정도 남았을 때 미리 다음 페이지 요청
+                if maxRequestedIndex >= totalItems - threshold {
+                    self.fetchMore.accept(())
+                }
+            }
+            .disposed(by: disposeBag)
     }
 
 }
