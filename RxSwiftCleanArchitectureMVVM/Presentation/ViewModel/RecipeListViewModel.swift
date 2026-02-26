@@ -95,7 +95,7 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
                 let favoriteRecipeDictionary = usecase.convertListToDictionary(favoriteRecipes: favoriteRecipeList)
                 let keys = favoriteRecipeDictionary.keys.sorted()
                 keys.forEach { key in
-                    cellData.append(.header(key))
+//                    cellData.append(.header(key))
                     if let recipes = favoriteRecipeDictionary[key] {
                         cellData += recipes.map { RecipeListCellData.recipe(recipe: $0, isFavorite: true) }
                     }
