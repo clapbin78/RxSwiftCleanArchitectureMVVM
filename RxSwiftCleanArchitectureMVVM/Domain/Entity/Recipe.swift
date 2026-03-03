@@ -14,6 +14,10 @@ public struct RecipeApiResult: Decodable {
         case cookRecipes = "COOKRCP01"
     }
     
+    init(cookRecipes: CookRecipes) {
+        self.cookRecipes = cookRecipes
+    }
+    
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.cookRecipes = try container.decode(CookRecipes.self, forKey: .cookRecipes)
@@ -34,6 +38,12 @@ public struct CookRecipes: Decodable {
         case recipes = "row"
     }
     
+    init(totalCount: String, apiResult: ApiResult, recipes: [Recipe]?) {
+        self.totalCount = totalCount
+        self.apiResult = apiResult
+        self.recipes = recipes
+    }
+    
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.totalCount = try container.decode(String.self, forKey: .totalCount)
@@ -49,6 +59,11 @@ public struct ApiResult: Decodable {
     enum CodingKeys: String, CodingKey {
         case code = "CODE"
         case message = "MSG"
+    }
+    
+    init(code: String, message: String) {
+        self.code = code
+        self.message = message
     }
     
     public init(from decoder: any Decoder) throws {

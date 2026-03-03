@@ -9,7 +9,7 @@ import Foundation
 @testable import RxSwiftCleanArchitectureMVVM
 
 public struct MockRecipeRepository: RecipeRepositoryProtocol {
-    public func fetchRecipes(query: String, startIndex: Int, endIndex: Int) async -> Result<RxSwiftCleanArchitectureMVVM.RecipeList, RxSwiftCleanArchitectureMVVM.NetworkError> {
+    public func fetchRecipes(query: String, startIndex: Int, endIndex: Int) async -> Result<RxSwiftCleanArchitectureMVVM.RecipeApiResult, RxSwiftCleanArchitectureMVVM.NetworkError> {
         .failure(.noData)
     }
     
@@ -21,7 +21,7 @@ public struct MockRecipeRepository: RecipeRepositoryProtocol {
         .failure(.saveFailed(""))
     }
     
-    public func removeFavoriteRecipe(recipeId: Int) -> Result<Bool, RxSwiftCleanArchitectureMVVM.CoreDataError> {
+    public func removeFavoriteRecipe(recipeSequence: String) -> Result<Bool, RxSwiftCleanArchitectureMVVM.CoreDataError> {
         .failure(.removeFailed(""))
     }
     

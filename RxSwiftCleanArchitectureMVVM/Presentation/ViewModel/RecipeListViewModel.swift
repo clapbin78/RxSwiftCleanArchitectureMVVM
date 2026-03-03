@@ -22,7 +22,7 @@ public final class RecipeListViewModel: RecipeListViewModelProtocol {
     private let favoriteRecipeList = BehaviorRelay<[Recipe]>(value: []) // 목록에 보여줄 리스트
     private var startIndex: Int = 0
     
-    public init(usecase: RecipeListUsecase) {
+    public init(usecase: RecipeListUsecaseProtocol) {
         self.usecase = usecase
     }
     
