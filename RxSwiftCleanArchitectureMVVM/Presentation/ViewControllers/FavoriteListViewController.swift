@@ -22,6 +22,8 @@ class FavoriteListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        favoriteListSearchBar.delegate = self
+        
         bindView()
         bindViewModel()
     }
@@ -84,5 +86,15 @@ extension FavoriteListViewController: UICollectionViewDelegateFlowLayout {
         let height: CGFloat = width + width / 2
         
         return CGSize(width: width, height: height)
+    }
+}
+
+extension FavoriteListViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
 }

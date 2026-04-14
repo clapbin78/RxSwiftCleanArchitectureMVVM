@@ -22,6 +22,8 @@ class RecipeListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        recipeListSearchBar.delegate = self
+        
         bindView()
         bindViewModel()
     }
@@ -85,5 +87,15 @@ extension RecipeListViewController: UICollectionViewDelegateFlowLayout {
         let height: CGFloat = width + width / 2
         
         return CGSize(width: width, height: height)
+    }
+}
+
+extension RecipeListViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
 }
